@@ -7,6 +7,8 @@ import gemini
 import vertex
 import base64
 from PIL import Image, ImageTk
+from google.cloud import aiplatform
+aiplatform.init()
 import io
 
 # Global Variables
@@ -259,5 +261,5 @@ def guiFunc(top10MapList: list):
 
     image_label = tk.Label(image_frame, bg="white")
     image_label.pack(fill="both", expand=True)
-    
+
     mainPage.mainloop()
