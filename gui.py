@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 import imdb_parser
 import webbrowser
 import threading
@@ -67,6 +67,22 @@ def generate_dialogue():
         dialogue_text_widget.delete("1.0", tk.END)
         dialogue_text_widget.insert(tk.END, output_text)
         tabs.select(1)
+
+        # Save the dialogue to a .txt file --user gives the name
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt")],
+            title="Save generated dialogue"
+        )
+
+        if file_path:
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(output_text)
+            messagebox.showinfo("Saved", f"Dialogue saved to {file_path}")
+        else:
+            messagebox.showerror("Could not save", "There has been an error while saving.")
+
+
     except Exception as e:
         messagebox.showerror("Error", f"Gemini API error: {e}")
 
@@ -140,7 +156,7 @@ def update_details(index, top10MapList):
         dialogue_text_widget.insert(tk.END, dialogue_cache[title])
     else:
         dialogue_text_widget.delete("1.0", tk.END)
-        dialogue_text_widget.insert(tk.END, "Bu film için henüz bir diyalog oluşturulmadı.")
+        dialogue_text_widget.insert(tk.END, "Dialogue has not been generated for this movie.")
 
     # Görsel varsa göster, yoksa temizle
     if title in image_cache:
@@ -243,5 +259,5 @@ def guiFunc(top10MapList: list):
 
     image_label = tk.Label(image_frame, bg="white")
     image_label.pack(fill="both", expand=True)
-
+    
     mainPage.mainloop()
